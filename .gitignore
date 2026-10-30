@@ -1,0 +1,17 @@
+# Archivos temporales de MATLAB
+*.asv
+*.autosave
+*.m~
+*.mex*
+slprj/
+*.slxc
+codegen/
+
+# Resultados generados (se pueden volver a crear ejecutando el código)
+resultados/
+*.mat
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
