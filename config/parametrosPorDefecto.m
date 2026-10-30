@@ -20,6 +20,8 @@ function p = parametrosPorDefecto()
 %     M_MAXIMO         : orden máximo permitido
 %     SPAN_FILTRO      : duración del filtro RRC en símbolos
 %     SPS_MINIMO       : muestras por símbolo mínimas
+%     SPS_MAXIMO       : muestras por símbolo máximas (límite de memoria)
+%     MARGEN_NYQUIST   : fs >= MARGEN_NYQUIST * 2 * frecuencia máxima
 
     % --- Configuración modificable ---
     p.esquema     = 'QAM';
@@ -37,4 +39,6 @@ function p = parametrosPorDefecto()
     p.M_MAXIMO         = 256;
     p.SPAN_FILTRO      = 10;     % el RRC dura 10 símbolos
     p.SPS_MINIMO       = 8;      % al menos 8 muestras por símbolo
+    p.SPS_MAXIMO       = 400;    % evita vectores de cientos de millones de muestras
+    p.MARGEN_NYQUIST   = 1.25;   % 25 % por encima del mínimo de Nyquist
 end
