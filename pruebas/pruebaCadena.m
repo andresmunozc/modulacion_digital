@@ -38,7 +38,8 @@ fprintf('2. Canal sin ruido:\n');
 for c = 1:size(casos, 1)
     q = p; q.esquema = casos{c, 1}; q.M = casos{c, 2}; q.numBits = 2e4;
     res = simularSistema(q, Inf);
-    errorMuestras = max(abs(res.rx.muestras - res.tx.simbolos));
+    % Error relativo a la amplitud de la constelación (ISI residual)
+    errorMuestras = max(abs(res.rx.muestras - res.tx.simbolos)) / sqrt(res.tx.Es);
     fprintf('   %3d-%s: BER = %g, error máx. en muestras = %.1e\n', ...
             q.M, q.esquema, res.ber, errorMuestras);
     if res.ber ~= 0 || errorMuestras > 0.05

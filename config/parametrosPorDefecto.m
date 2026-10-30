@@ -8,6 +8,8 @@ function p = parametrosPorDefecto()
 %     esquema      : 'PSK', 'QAM' o 'PAM'
 %     M            : orden de la modulación (número de símbolos)
 %     rollOff      : factor de roll-off del filtro RRC, 0 <= alpha <= 1
+%     amplitud     : amplitud A de la constelación (mitad de la distancia
+%                    mínima en PAM/QAM, radio en PSK)
 %     fc           : frecuencia portadora [Hz]
 %     Rs           : tasa de símbolo [símbolos/s]
 %     ebN0Db       : Eb/N0 para ojo y constelación [dB]
@@ -27,6 +29,7 @@ function p = parametrosPorDefecto()
     p.esquema     = 'QAM';
     p.M           = 4;
     p.rollOff     = 0.5;
+    p.amplitud    = 1;
     p.fc          = 10e3;        % 10 kHz
     p.Rs          = 1e3;         % 1000 símbolos/s
     p.ebN0Db      = 10;
