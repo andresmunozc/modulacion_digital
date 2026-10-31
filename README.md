@@ -45,6 +45,13 @@ run('pruebas/pruebaMetricasGraficas.m') % métricas y espectros
 run('pruebas/pruebaValidacion.m')       % manejo de entradas no permitidas
 ```
 
+Análisis comparativo 4-PAM / 4-QAM / 4-PSK (tabla de diferencias de Eb/N0
+para BER de 1e-2 a 1e-7; tarda unos minutos):
+
+```matlab
+run('analisis/tablaComparativa.m')      % guarda tabla CSV y figuras en resultados/
+```
+
 ## Convenciones de código
 
 - Funciones y variables en camelCase (`mapearSimbolos`, `numBits`).
