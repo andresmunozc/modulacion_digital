@@ -9,5 +9,5 @@ function salida = filtroAcoplado(senal, h, fs)
 %   símbolo transmitido) más ruido de varianza N0/2 por componente.
 
     hAcoplado = fliplr(h);     % h(-t); para el RRC es el mismo h
-    salida = conv(senal, hAcoplado) / fs;
+    salida = convolucionFFT(senal, hAcoplado) / fs;
 end

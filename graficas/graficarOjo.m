@@ -14,17 +14,24 @@ function graficarOjo(ax, senalFiltrada, sps, span, numSimbolos)
     rama = real(senalFiltrada);
     retardo = span * sps;                      % primer instante de muestreo
     tRelativo = (-sps : sps) / sps;            % de -Ts a +Ts
+    largoTrazo = numel(tRelativo);
 
     % Se omiten los primeros y últimos símbolos (colas del filtro)
-    primeros = 2;
-    ultimo = min(numSimbolos - 2, primeros + MAX_TRAZOS);
-    cla(ax);
-    hold(ax, 'on');
-    for k = primeros:ultimo
-        centro = retardo + 1 + (k - 1)*sps;
-        plot(ax, tRelativo, rama(centro - sps : centro + sps), 'b');
+    simbolos = 2 : min(numSimbolos - 2, 1 + MAX_TRAZOS);
+    numTrazos = numel(simbolos);
+
+    % Todos los trazos se unen en un solo vector separado por NaN: se
+    % dibuja como un único objeto (mucho más rápido que un plot por trazo).
+    x = NaN(1, numTrazos * (largoTrazo + 1));
+    y = NaN(1, numTrazos * (largoTrazo + 1));
+    for i = 1:numTrazos
+        centro = retardo + 1 + (simbolos(i) - 1)*sps;
+        posiciones = (i - 1)*(largoTrazo + 1) + (1:largoTrazo);
+        x(posiciones) = tRelativo;
+        y(posiciones) = rama(centro - sps : centro + sps);
     end
-    hold(ax, 'off');
+
+    plot(ax, x, y, 'Color', [0.1 0.3 0.8]);
     grid(ax, 'on');
     xlim(ax, [-1 1]);
     xlabel(ax, 't / T_s');

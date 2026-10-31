@@ -13,5 +13,5 @@ function senalBandaBase = conformarPulso(simbolos, h, sps)
     trenImpulsos = zeros(1, numSimbolos * sps);
     trenImpulsos(1:sps:end) = simbolos;
 
-    senalBandaBase = conv(trenImpulsos, h);
+    senalBandaBase = convolucionFFT(trenImpulsos, h);
 end

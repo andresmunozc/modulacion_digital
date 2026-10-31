@@ -33,11 +33,20 @@ bits -> mapeo Gray -> filtro RRC -> modulación pasabanda -> canal AWGN
 Desde la carpeta raíz del proyecto en MATLAB:
 
 ```matlab
-run('pruebas/pruebaMapeo.m')   % valida el mapeo
+main                                    % abre la interfaz gráfica
+```
+
+Pruebas de validación:
+
+```matlab
+run('pruebas/pruebaMapeo.m')            % mapeo Gray y energía de las constelaciones
+run('pruebas/pruebaCadena.m')           % cadena completa, ruido y BER vs teoría
+run('pruebas/pruebaMetricasGraficas.m') % métricas y espectros
+run('pruebas/pruebaValidacion.m')       % manejo de entradas no permitidas
 ```
 
 ## Convenciones de código
 
 - Funciones y variables en camelCase (`mapearSimbolos`, `numBits`).
-- Constantes en MAYÚSCULAS (`M_MAXIMO`, `SPAN_FILTRO`).
+- Constantes en MAYÚSCULAS (`M_MAXIMO`, `SPAN_MINIMO`).
 - Una función pública por archivo, con encabezado de ayuda (`help nombreFuncion`).

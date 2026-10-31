@@ -34,7 +34,7 @@ function m = calcularMetricas(p, res)
 
     % Parte estable de la señal: se descartan span/2 símbolos al inicio y
     % al final, donde el filtro todavía no ha "llenado" sus colas.
-    colas  = p.SPAN_FILTRO * res.sps;
+    colas  = res.tx.span * res.sps;
     s      = res.tx.senalPasabanda(colas + 1 : end - colas);
     m.potenciaMedida = mean(s.^2);
     m.EsMedida       = m.potenciaMedida / p.Rs;

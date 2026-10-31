@@ -20,15 +20,23 @@ fallos = 0;
 
 % --- 1. Pulso RRC ---
 [sps, fs] = calcularMuestreo(p);
-h = filtroRaizCosenoAlzado(p.rollOff, sps, p.SPAN_FILTRO, fs);
+span = calcularSpan(p);
+h = filtroRaizCosenoAlzado(p.rollOff, sps, span, fs);
 energiaPulso = sum(h.^2) / fs;
-cascada = conv(h, h) / fs;                      % coseno alzado
+cascada = convolucionFFT(h, h) / fs;            % coseno alzado
 centro = (numel(cascada) + 1) / 2;
-otrosSimbolos = cascada(centro + sps*(1:p.SPAN_FILTRO - 1));
+otrosSimbolos = cascada(centro + sps*(1:span - 1));
 isiMaxima = max(abs(otrosSimbolos)) / cascada(centro);
 fprintf('1. Energía del pulso = %.6f, ISI máxima = %.2e\n', energiaPulso, isiMaxima);
 if abs(energiaPulso - 1) > 1e-9 || isiMaxima > 1e-2
     fprintf('   FALLA en el pulso RRC\n'); fallos = fallos + 1;
+end
+% La convolución por FFT debe dar lo mismo que la directa (conv)
+x = randn(1, 500) + 1j*randn(1, 500);
+diferencia = max(abs(convolucionFFT(x, h) - conv(x, h)));
+fprintf('   Convolución FFT vs directa: diferencia máxima = %.1e\n', diferencia);
+if diferencia > 1e-9 * max(abs(conv(x, h)))
+    fprintf('   FALLA en convolucionFFT\n'); fallos = fallos + 1;
 end
 
 % --- 2. Sin ruido ---
@@ -72,6 +80,20 @@ for c = 1:size(casos, 1)
         if res.numErrores >= 100 && errorRelativo > 0.15
             fprintf('   FALLA: la BER simulada no coincide con la teórica\n'); fallos = fallos + 1;
         end
+    end
+end
+
+% --- 4b. Roll-off pequeño: el filtro se alarga y no queda ISI ---
+fprintf('4b. BER con roll-off pequeño (8-PAM, Eb/N0 = 10 dB):\n');
+for alpha = [0.05 0.1 0.25 1]
+    q = p; q.esquema = 'PAM'; q.M = 8; q.rollOff = alpha; q.numBits = 2e5;
+    res = simularSistema(q, 10);
+    teorica = berTeorica('PAM', 8, 10);
+    errorRelativo = abs(res.ber - teorica) / teorica;
+    fprintf('   alpha = %.2f, span = %3d símbolos: simulada = %.3e, teórica = %.3e (dif. %.1f %%)\n', ...
+            alpha, res.tx.span, res.ber, teorica, 100*errorRelativo);
+    if errorRelativo > 0.15
+        fprintf('   FALLA: ISI por filtro demasiado corto\n'); fallos = fallos + 1;
     end
 end
 

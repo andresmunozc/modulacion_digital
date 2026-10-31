@@ -20,10 +20,15 @@ function p = parametrosPorDefecto()
 %   Constantes (no modificables desde la interfaz):
 %     ESQUEMAS_VALIDOS : lista de esquemas soportados
 %     M_MAXIMO         : orden máximo permitido
-%     SPAN_FILTRO      : duración del filtro RRC en símbolos
+%     SPAN_MINIMO/MAXIMO : límites de la duración del filtro RRC en
+%                          símbolos (ver calcularSpan)
 %     SPS_MINIMO       : muestras por símbolo mínimas
 %     SPS_MAXIMO       : muestras por símbolo máximas (límite de memoria)
 %     MARGEN_NYQUIST   : fs >= MARGEN_NYQUIST * 2 * frecuencia máxima
+%     MAX_MUESTRAS     : longitud máxima de la señal (límite de memoria)
+%     NUM_BITS_MIN/MAX : rango permitido para el número de bits
+%     EBN0_MIN/MAX_DB  : rango permitido para Eb/N0
+%     MAX_PUNTOS_BER   : puntos máximos de la curva BER
 
     % --- Configuración modificable ---
     p.esquema     = 'QAM';
@@ -40,8 +45,15 @@ function p = parametrosPorDefecto()
     % --- Constantes ---
     p.ESQUEMAS_VALIDOS = {'PSK', 'QAM', 'PAM'};
     p.M_MAXIMO         = 256;
-    p.SPAN_FILTRO      = 10;     % el RRC dura 10 símbolos
+    p.SPAN_MINIMO      = 10;     % el RRC dura al menos 10 símbolos
+    p.SPAN_MAXIMO      = 100;    % y como máximo 100 (alpha cercano a 0)
     p.SPS_MINIMO       = 8;      % al menos 8 muestras por símbolo
     p.SPS_MAXIMO       = 400;    % evita vectores de cientos de millones de muestras
     p.MARGEN_NYQUIST   = 1.25;   % 25 % por encima del mínimo de Nyquist
+    p.MAX_MUESTRAS     = 2e7;    % tamaño máximo de la señal muestreada
+    p.NUM_BITS_MIN     = 1e3;
+    p.NUM_BITS_MAX     = 2e6;
+    p.EBN0_MIN_DB      = -10;
+    p.EBN0_MAX_DB      = 40;
+    p.MAX_PUNTOS_BER   = 41;
 end

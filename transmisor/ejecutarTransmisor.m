@@ -6,7 +6,7 @@ function tx = ejecutarTransmisor(p, sps, fs)
 %
 %   Devuelve una estructura con las señales de cada etapa (se usan para
 %   las gráficas) y los valores de energía de referencia:
-%     tx.bits, tx.simbolos, tx.tabla, tx.h
+%     tx.bits, tx.simbolos, tx.tabla, tx.h, tx.span
 %     tx.senalBandaBase, tx.senalPasabanda, tx.t
 %     tx.Es : energía promedio por símbolo [J] (según la amplitud A)
 %     tx.Eb : energía por bit, Eb = Es / k
@@ -23,7 +23,8 @@ function tx = ejecutarTransmisor(p, sps, fs)
     tx.simbolos = sqrt(EsDiseno) * simbolosUnitarios;
     tx.tabla    = sqrt(EsDiseno) * tablaUnitaria;
 
-    tx.h = filtroRaizCosenoAlzado(p.rollOff, sps, p.SPAN_FILTRO, fs);
+    tx.span = calcularSpan(p);       % duración del filtro según alpha
+    tx.h = filtroRaizCosenoAlzado(p.rollOff, sps, tx.span, fs);
     tx.senalBandaBase = conformarPulso(tx.simbolos, tx.h, sps);
     [tx.senalPasabanda, tx.t] = moduladorPasabanda(tx.senalBandaBase, p.fc, fs);
 

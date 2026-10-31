@@ -80,7 +80,7 @@ res = simularSistema(p, p.ebN0Db);
 [berSim, berTeo] = curvaBer(p);
 
 figure('Name', 'Gráficas del sistema', 'Position', [50 50 1300 700]);
-graficarOjo(subplot(2, 3, 1), res.rx.senalFiltrada, res.sps, p.SPAN_FILTRO, numel(res.tx.simbolos));
+graficarOjo(subplot(2, 3, 1), res.rx.senalFiltrada, res.sps, res.tx.span, numel(res.tx.simbolos));
 graficarConstelacion(subplot(2, 3, 2), res.rx.muestras, res.tx.tabla);
 graficarBer(subplot(2, 3, 3), p.ebN0RangoDb, berSim, berTeo, sprintf('%d-%s', p.M, p.esquema));
 graficarEspectro(subplot(2, 3, 4), res.tx.senalBandaBase, res.fs, 'bandaBase', p);
